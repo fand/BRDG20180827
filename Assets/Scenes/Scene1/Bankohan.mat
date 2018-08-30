@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Bankohan
+  m_Shader: {fileID: 4800000, guid: 822d36b6202fe7740ac3435142d87d04, type: 3}
+  m_ShaderKeywords: OBJECT_SHAPE_CUBE
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - _AccTime: 63.44984
+    - _Glossiness: 0.781
+    - _Loop: 20
+    - _Metallic: 0.206
+    - _MinDistance: 0.001
+    - _ShadowExtraBias: 0
+    - _ShadowLoop: 1
+    - _ShadowMinDistance: 0.001
+    - _Size1: 1
+    - _Size2: 1
+    m_Colors:
+    - _Color: {r: 1, g: 0, b: 0.27645588, a: 1}
+    - _Diffuse: {r: 1, g: 1, b: 1, a: 1}
+    - _Emission: {r: 1, g: 0, b: 0.62352943, a: 1}
+    - _Specular: {r: 0, g: 0.14618564, b: 1, a: 0.7607843}
+    - _YoColor: {r: 0.005, g: 0.005, b: 0.005, a: 1}

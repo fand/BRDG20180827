@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3acd6fe57257048db802c1c4c2b75248, type: 3}
+  m_Name: New Generator
+  m_EditorClassIdentifier: 
+  shaderName: Bankohan
+  shaderReference: {fileID: 4800000, guid: 822d36b6202fe7740ac3435142d87d04, type: 3}
+  shaderTemplate: uRaymarching/Standard
+  variables:
+  - key: Name
+    value: Bankohan
+  - key: Culling
+    value: Off
+  - key: RaymarchingShaderDirectory
+    value: Assets/uRaymarching/Shaders/Include
+  conditions:
+  - key: ShadowCaster
+    value: 1
+  - key: WorldSpace
+    value: 0
+  - key: FollowObjectScale
+    value: 0
+  - key: DoNotOutputDepth
+    value: 0
+  - key: CameraInsideObject
+    value: 1
+  - key: FallbackToDiffuse
+    value: 1
+  - key: SphericalHarmonicsPerPixel
+    value: 1
+  - key: FallbackToStandardShader
+    value: 1
+  blocks:
+  - key: Properties
+    value: '// _Color2("Color2", Color) = (1.0, 1.0, 1.0, 1.0)
+
+      _AccTime("Accumulated Time", Float) = 0.0
+
+      _Size1("Size1", Float) = 1.0
+
+      _Size2("Size2", Float) = 1.0
+
+      _YoColor("YoColor", Color) = (0, 1, 1, 1)'
+    folded: 0
+  - key: DistanceFunction
+    value: "float _AccTime;\nfloat _Size1;\nfloat _Size2;\nfloat _Box;\nfloat4 _YoColor;\n\ninline
+      float2 rotate(float2 st, float a) {\n    float c = cos(a), s = sin(a);\n    return
+      mul(float2x2(c, -s, s, c), st);\n}\n\ninline float smoothMin(float d1, float
+      d2, float k){\n    float h = exp(-k * d1) + exp(-k * d2);\n    return -log(h)
+      / k;\n}\n\ninline float sdBox(float3 p, float b){\n    b *= 1.4;\n    p += sin(_AccTime
+      * 92) * .2;\n    p.xy = rotate(p.xy, _AccTime + b) * (sin(_AccTime * 43.) *.1+
+      1.1);\n    p.xz = rotate(p.xz, _AccTime * 2. + b) * (sin(_AccTime * 42.) * .04
+      + 1.1);\n    return length(max(abs(p)-b,0.0))-.02;\n}\n\ninline float DistanceFunction(float3
+      p)\n{\n    float t = _AccTime* .3;\n\n    float3 c1 = float3(0, 0, 0);\n    float
+      d1 = _Box == 1 ? \n        sdBox(p, 2.4) :\n        length(p - c1) - 2.4 * _Size1;\n\n
+      \   float d = 9999.;\n\n    for (int i = 0; i <2; i++) {\n        float fi =
+      float(i + t*.3);\n        float ti = (1. - pow(1. - frac((t + fi * .2)), 1.5))
+      * 8.;\n\n        float3 u = float3(rotate(float2(1, 0), (fi + 1.) * .7 * PI),
+      0);\n        u.xy = rotate(u.xy, (fi + 1.) * .3);\n        u.xz = rotate(u.xz,
+      (fi * 2. + 1.) * 1.9);\n        float3 c2 = u * ti;\n        float d2 = _Box
+      == 1 ? \n            sdBox(p - c2, .7) :\n            length(p - c2) - .7 *
+      _Size2;\n\n        float a1 = max(dot(normalize(p - c1), normalize(c2 - c1)),
+      0.);\n        float a2 = max(dot(normalize(p - c2), normalize(c1 - c2)), 0.);\n\n
+      \       d = smoothMin(\n            d,\n            smoothMin(\n                d1
+      * (1.1 - pow(a1, 15.)),\n                d2 * (1.1 - pow(a2, 15.)),\n                2.2\n
+      \           ),\n            2.5\n        );\n\n        for (int j = 0; j < 2;
+      j++) {\n            float fj = float(j + t + i);\n            float tj = (1.
+      - pow(1. - max(ti - 5. + fj * .8, 0.) / 3., 3.)) * 4.;\n\n            float3
+      uj = float3(rotate(float2(1, 0), (fj + 1.) * .4 * PI + 1.5 * PI), 0);\n            uj.xy
+      = rotate(uj.xy, (fi + 1.) * 1.3);\n            uj.xz = rotate(uj.xz, (fi * 3.
+      + 1.) * .9);\n\n            float3 cj = c2 + uj * tj;\n            float dj
+      = length(p - cj) - .3 * (_Size1 * _Size2);\n\n            float aj1 = max(dot(normalize(p
+      - c2), normalize(cj - c2)), 0.);\n            float aj2 = max(dot(normalize(p
+      - cj), normalize(c2 - cj)), 0.);\n\n            d = smoothMin(\n                d,\n
+      \               smoothMin(\n                    d2 * (1.1 - pow(aj1, 10.)),\n
+      \                   dj * (1.1 - pow(aj2, 10.)),\n                    4.3\n                ),\n
+      \               3.6\n            );\n        }\n    }\n\n    return d;\n}"
+    folded: 1
+  - key: PostEffect
+    value: "inline void PostEffect(RaymarchInfo ray, inout PostEffectOutput o)\n{\n
+      \   o.Emission = _YoColor;\n}"
+    folded: 0
+  constants: {fileID: 11400000, guid: 4df15a420345e4af98645ddd9620aa5b, type: 2}
+  basicFolded: 1
+  conditionsFolded: 0
+  variablesFolded: 0
+  materialsFolded: 0
+  constantsFolded: 0
