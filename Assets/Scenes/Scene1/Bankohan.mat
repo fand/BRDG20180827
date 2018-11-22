@@ -19,7 +19,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - _AccTime: 63.44984
+    - _AccTime: 407.32126
     - _Glossiness: 0.781
     - _Loop: 20
     - _Metallic: 0.206
